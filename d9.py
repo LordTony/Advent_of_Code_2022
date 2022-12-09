@@ -1,4 +1,4 @@
-steps = [[x[0], int(x.split(" ")[1])] for x in open("d9.txt","r").read().splitlines()]
+steps = [x.split(" ") for x in open("d9.txt","r").read().splitlines()]
 head, tail, c  = [0,0], [0,0], set([0,0])
 
 closeEnough = lambda h,t: abs(h[0] - t[0]) < 2 and abs(h[1] - t[1]) < 2
