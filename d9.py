@@ -1,7 +1,8 @@
 steps = [x.split(" ") for x in open("d9.txt","r").read().splitlines()]
 head, tail, c  = [0,0], [0,0], set([0,0])
 
-closeEnough = lambda h,t: abs(h[0] - t[0]) < 2 and abs(h[1] - t[1]) < 2
+def closeEnough(h,t): 
+    return abs(h[0] - t[0]) < 2 and abs(h[1] - t[1]) < 2
 
 def getCloser(h, t):
     t[0] += (t[0] < h[0]) - (t[0] > h[0])
