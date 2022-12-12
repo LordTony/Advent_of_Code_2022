@@ -42,20 +42,14 @@ def solve(graph, starting_vertex, end):
     return distances[end]
 
 ## MAIN ##
-g, nodes, start, end = open("d12.txt", "r").read().splitlines(), {}, (0,0), (0,0)
+g, nodes, start, end, aPositions = open("d12.txt", "r").read().splitlines(), {}, (0,0), (0,0), []
 
 for y, row in enumerate(g):
     for x, letter in enumerate(row):
         addLinks((x,y), nodes, g)
         if letter == 'E': end = (x,y)
         if letter == 'S': start = (x,y)
+        if letter == 'a': aPositions.append((x,y))
 
 print("part1:", solve(nodes, start, end))
-
-startPositions = []
-for y, row in enumerate(g):
-    for x, letter in enumerate(row):
-        if letter == 'a':
-            startPositions.append((x,y))
-            
-print("part2:", min([solve(nodes,x,end) for x in startPositions]))
+print("part2:", min([solve(nodes,x,end) for x in aPositions]))
