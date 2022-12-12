@@ -17,18 +17,10 @@ def canGo(c, d, g):
         start = getLetter(c, g)
         end = getLetter(d, g)    
         return (ord(start) + 1 >= ord(end) and ord(end) > 96) \
-            or (getLetter(d, g) == 'E' and getLetter(c, g) > 'x') \
+            or (getLetter(d, g) == 'E' and getLetter(c, g) in ['y','z']) \
             or getLetter(c, g) == 'S'
     return False
     
-g, nodes, start, end = open("d12.txt", "r").read().splitlines(), {}, (0,0), (0,0)
-
-for y, row in enumerate(g):
-    for x, letter in enumerate(row):
-        addLinks((x,y), nodes, g)
-        if letter == 'E': end = (x,y)
-        if letter == 'S': start = (x,y)
-
 def solve(graph, starting_vertex):
     distances = {vertex: 1000000 for vertex in graph}
     distances[starting_vertex] = 0
@@ -48,6 +40,15 @@ def solve(graph, starting_vertex):
                 heapq.heappush(pq, (distance, neighbor))
 
     return distances[end]
+
+## MAIN ##
+g, nodes, start, end = open("d12.txt", "r").read().splitlines(), {}, (0,0), (0,0)
+
+for y, row in enumerate(g):
+    for x, letter in enumerate(row):
+        addLinks((x,y), nodes, g)
+        if letter == 'E': end = (x,y)
+        if letter == 'S': start = (x,y)
 
 print("part1:", solve(nodes, start))
 
