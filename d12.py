@@ -21,7 +21,7 @@ def canGo(c, d, g):
             or getLetter(c, g) == 'S'
     return False
     
-def solve(graph, starting_vertex):
+def solve(graph, starting_vertex, end):
     distances = {vertex: 1000000 for vertex in graph}
     distances[starting_vertex] = 0
 
@@ -50,7 +50,7 @@ for y, row in enumerate(g):
         if letter == 'E': end = (x,y)
         if letter == 'S': start = (x,y)
 
-print("part1:", solve(nodes, start))
+print("part1:", solve(nodes, start, end))
 
 startPositions = []
 for y, row in enumerate(g):
@@ -58,4 +58,4 @@ for y, row in enumerate(g):
         if letter == 'a':
             startPositions.append((x,y))
             
-print("part2", min([solve(nodes,x) for x in startPositions]))
+print("part2:", min([solve(nodes,x,end) for x in startPositions]))
