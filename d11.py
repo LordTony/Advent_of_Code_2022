@@ -1,4 +1,6 @@
 from re import findall 
+from functools import reduce
+from operator import mul
 
 def operate(old, monkey, worryDivider):
     oprand = int(monkey["oprand"]) if monkey["oprand"].isnumeric() else old
@@ -31,13 +33,14 @@ def solve(rounds, panicMode):
             })
         container.append(0)
 
+    prod = lambda l: reduce(mul, l, 1)
+    
     # Had to look up this trick.
     worryDivider = prod([x["mod"] for x in monkeys])
         
     for x in range(rounds):
         for i, monkey in enumerate(monkeys):
             takeTurn(monkeys, monkey, i, panicMode, container, worryDivider)
-    output = sorted(container)
-    return output[-2] * output[-1]
+    return prod(sorted(container)[-2::])
 
 print(solve(20, False), solve(10000, True))
