@@ -18,7 +18,7 @@ def complete():
     done = True
     
 def translateDraw(window, item, color):
-    pygame.draw.rect(window, color, Rect((item[0]-minX + 1)*pxSize, item[1]*pxSize, pxSize, pxSize))
+    pygame.draw.rect(window, color, Rect((item[0] - minX + 1) * pxSize, item[1] * pxSize, pxSize, pxSize))
     pygame.display.update()
     
 def nextMove(g):
