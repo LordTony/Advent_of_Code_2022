@@ -6,19 +6,20 @@ d = [[(int(i.split(",")[0]),int(i.split(",")[1])) for i in x.split(" -> ")] \
     for x in open("d14.txt", "r").read().splitlines()]
 
 sandPoint = (500,0)
-minX, maxDepth, maxX, pxSize, sleepTime = 1000, 0, 0, 4, .002
-grid, sand = set(), set()
-BLACK, RED, BLUE, WHITE = (0,0,0), (255,0,0), (0,0,255), (255,255,255)
+minX, maxDepth, maxX, pxSize, sleepTime, bottomY = 1000, 0, 0, 4, .001, 0
+grid, sand, movedSand = set(), set(), set()
+BLACK, RED, BLUE, WHITE, ORANGE = (0,0,0), (255,0,0), (0,0,255), (255,255,255), (255, 0xA5, 0)
 done = False
-
-free = lambda node: node not in sand and node not in grid
+part = 1
+#part = 2
+free = lambda node: node not in sand and node not in grid and (part == 1 or part == 2 and node[1] < bottomY)
 
 def complete():
     print(len(sand))
-    done = True
-    
+    return True
+        
 def translateDraw(window, item, color):
-    pygame.draw.rect(window, color, Rect((item[0] - minX + 1) * pxSize, item[1] * pxSize, pxSize, pxSize))
+    pygame.draw.rect(window, color, Rect((item[0] - minX + 2) * pxSize, item[1] * pxSize, pxSize, pxSize))
     pygame.display.update()
     
 def nextMove(g):
@@ -43,17 +44,19 @@ for shape in d:
             for x in range(start, end + 1):
                 grid.add((curr[0], x) if orientation else (x, curr[1]))
 
-# comment this loop out for part 1 solve
-for x in range(-200, 800): grid.add((x, maxDepth+2))
+bottomY = maxDepth + 2
 
 # Draw Board
 pygame.init()
 pygame.display.set_caption('Sand Sand and More Sand')
-window = pygame.display.set_mode(((maxX - minX + 2) * pxSize, (maxDepth + 5)* pxSize))
+window = pygame.display.set_mode(((maxX - minX + 4) * pxSize, (maxDepth + 5)* pxSize))
 window.fill(WHITE)
 translateDraw(window, sandPoint, BLUE)
 for rock in grid:
     translateDraw(window, rock, BLACK)
+
+for x in range(maxX - minX, maxX + 4, [0,2,1][part]):
+    translateDraw(window, (x, bottomY), BLUE if part == 1 else BLACK)
 
 # Start "Game" Loop
 while True:
@@ -61,16 +64,20 @@ while True:
         grain = sandPoint
         next = nextMove(grain)
         while next is not None:
-            if(grain[1] > maxDepth):
-                complete()
+            if next not in movedSand:
+                translateDraw(window, next, RED)
+                movedSand.add(next)
+            if(part == 1 and grain[1] > maxDepth):
+                done = complete()
                 break
             grain = next
             next = nextMove(grain)
-        sand.add(grain)
-        translateDraw(window, grain, RED)
+        if not done: 
+            sand.add(grain)
+            translateDraw(window, grain, ORANGE)
         pygame.display.update()
         sleep(sleepTime)
-        if(grain == sandPoint): complete()
+        if(grain == sandPoint): done = complete()
     for event in pygame.event.get():
         if event.type == QUIT:
             pygame.quit()

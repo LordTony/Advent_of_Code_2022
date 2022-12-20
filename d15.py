@@ -61,4 +61,3 @@ for i, x in enumerate(snbs):
 
 print(len(impossible))
 print((4000000 * foundItem[0]) + foundItem[1])
-    
